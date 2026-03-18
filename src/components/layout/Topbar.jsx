@@ -12,7 +12,7 @@ export default function Topbar() {
     : user?.email || 'User'
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-border/60 bg-white px-6">
+    <header className="flex h-14 sm:h-16 items-center justify-between border-b border-border/60 bg-white px-4 sm:px-6">
       {/* Mobile hamburger */}
       <button
         onClick={openMobile}

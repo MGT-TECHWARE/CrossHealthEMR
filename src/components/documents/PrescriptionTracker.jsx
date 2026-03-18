@@ -104,7 +104,7 @@ export default function PrescriptionTracker({ prescriptions = [], onCreate, isLo
             onChange={(e) => setForm((f) => ({ ...f, physician_name: e.target.value }))}
             placeholder="Dr. Smith"
           />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input
               label="Prescription Date"
               type="date"
@@ -118,7 +118,7 @@ export default function PrescriptionTracker({ prescriptions = [], onCreate, isLo
               onChange={(e) => setForm((f) => ({ ...f, expiration_date: e.target.value }))}
             />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input
               label="Visits Authorized"
               type="number"

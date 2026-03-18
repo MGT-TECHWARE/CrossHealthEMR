@@ -30,7 +30,7 @@ export default function PatientInfoPanel({ patient }) {
 
   return (
     <aside className="w-full bg-white border border-border/60 rounded-xl shadow-sm">
-      <div className="p-6 border-b border-border/40">
+      <div className="p-4 sm:p-6 border-b border-border/40">
         <div className="flex items-center gap-4">
           <div className="flex items-center justify-center h-14 w-14 rounded-full bg-primary/10 text-primary font-bold text-lg font-sans">
             {initials}
@@ -42,7 +42,7 @@ export default function PatientInfoPanel({ patient }) {
         </div>
       </div>
 
-      <div className="px-6 py-2">
+      <div className="px-4 sm:px-6 py-2">
         <InfoRow icon={Calendar} label="Date of Birth" value={patient.date_of_birth ? formatDate(patient.date_of_birth) : null} />
         <InfoRow icon={Phone} label="Phone" value={patient.phone} />
         <InfoRow icon={Mail} label="Email" value={patient.email} />
@@ -61,7 +61,7 @@ export default function PatientInfoPanel({ patient }) {
       </div>
 
       {patient.medical_notes && (
-        <div className="px-6 pb-4">
+        <div className="px-4 sm:px-6 pb-4">
           <p className="text-xs font-medium font-sans text-muted-foreground uppercase tracking-wide mb-1">Medical Notes</p>
           <p className="text-sm font-sans text-foreground whitespace-pre-wrap">{patient.medical_notes}</p>
         </div>

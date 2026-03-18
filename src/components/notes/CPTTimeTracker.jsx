@@ -57,7 +57,7 @@ export default function CPTTimeTracker({ cptCodes = [], timeIn, timeOut, data = 
       </div>
 
       {/* Time In / Out */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="mb-1 block text-xs font-medium font-sans text-foreground/80">Time In</label>
           <input
@@ -83,7 +83,7 @@ export default function CPTTimeTracker({ cptCodes = [], timeIn, timeOut, data = 
         const codeInfo = cptCodes.find((c) => c.code === entry.cpt_code)
         return (
           <div key={idx} className="flex items-start gap-2 p-2 rounded-lg border border-border/40 bg-secondary/10">
-            <div className="flex-1 grid grid-cols-3 gap-2">
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-2">
               <div>
                 <select
                   value={entry.cpt_code}

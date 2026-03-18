@@ -17,8 +17,8 @@ function Section({ title, children }) {
 function DataRow({ label, value }) {
   if (!value) return null
   return (
-    <div className="flex gap-2">
-      <span className="text-xs font-medium text-muted-foreground w-32 shrink-0">{label}:</span>
+    <div className="flex flex-col sm:flex-row gap-0.5 sm:gap-2">
+      <span className="text-xs font-medium text-muted-foreground sm:w-32 shrink-0">{label}:</span>
       <span className="text-xs text-foreground/80">{value}</span>
     </div>
   )
@@ -36,8 +36,8 @@ export default function NotePreview({ note }) {
   return (
     <div className="max-w-3xl mx-auto bg-white rounded-xl border border-border/60 shadow-sm">
       {/* Header */}
-      <div className="border-b border-border/60 px-6 py-4">
-        <div className="flex items-center justify-between mb-2">
+      <div className="border-b border-border/60 px-4 sm:px-6 py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
           <div className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-primary" />
             <h2 className="text-lg font-semibold font-sans text-foreground">
@@ -58,7 +58,7 @@ export default function NotePreview({ note }) {
             )}
           </div>
         </div>
-        <div className="flex items-center gap-4 text-xs font-sans text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs font-sans text-muted-foreground">
           <span><Clock className="h-3 w-3 inline mr-1" />{formatDate(note.created_at)}</span>
           {note.complexity && <span>Complexity: {COMPLEXITY_LABELS[note.complexity]}</span>}
           {note.total_treatment_minutes && <span>Duration: {note.total_treatment_minutes} min</span>}
@@ -66,7 +66,7 @@ export default function NotePreview({ note }) {
       </div>
 
       {/* Body */}
-      <div className="px-6 py-4">
+      <div className="px-4 sm:px-6 py-4">
         {/* Subjective */}
         <Section title="SUBJECTIVE">
           <DataRow label="Chief Complaint" value={subj.chief_complaint} />
@@ -122,8 +122,8 @@ export default function NotePreview({ note }) {
 
       {/* Signature Footer */}
       {isSigned && (
-        <div className="border-t border-border/60 px-6 py-4 bg-secondary/20">
-          <div className="flex items-center justify-between">
+        <div className="border-t border-border/60 px-4 sm:px-6 py-4 bg-secondary/20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
             <div>
               <p className="text-sm font-semibold font-sans text-foreground">
                 Electronically Signed

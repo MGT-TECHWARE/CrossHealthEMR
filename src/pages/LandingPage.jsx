@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import {
   Activity,
+  ArrowRight,
   Brain,
   CalendarCheck,
   ChevronRight,
@@ -8,7 +9,6 @@ import {
   Dumbbell,
   Heart,
   Shield,
-  Sparkles,
   Star,
   Users,
 } from 'lucide-react'
@@ -17,21 +17,37 @@ import Button from '@/components/ui/Button'
 function Navbar() {
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-5 lg:px-12">
-      <div className="flex items-center gap-2">
-        <span className="text-xl font-bold text-white">Cross</span>
-        <span className="text-xl font-bold text-accent">Health</span>
+      <div className="flex items-center gap-3">
+        <img src="/cross_health_logo.png" alt="CrossHealth" className="h-10 w-10 object-contain" />
       </div>
-      <div className="flex items-center gap-4">
+      <div className="hidden sm:flex items-center gap-8">
+        <a href="#services" className="text-sm font-medium font-sans text-white/80 transition-colors hover:text-white">
+          Services
+        </a>
+        <a href="#technology" className="text-sm font-medium font-sans text-white/80 transition-colors hover:text-white">
+          VR Therapy
+        </a>
+        <a href="#about" className="text-sm font-medium font-sans text-white/80 transition-colors hover:text-white">
+          Recovery
+        </a>
+        <a href="#about" className="text-sm font-medium font-sans text-white/80 transition-colors hover:text-white">
+          About
+        </a>
+        <a href="#testimonials" className="text-sm font-medium font-sans text-white/80 transition-colors hover:text-white">
+          Providers
+        </a>
+      </div>
+      <div className="flex items-center gap-3">
         <Link
           to="/login"
-          className="text-sm font-medium font-sans text-white/80 transition-colors hover:text-white"
+          className="hidden sm:inline text-sm font-medium font-sans text-white/80 transition-colors hover:text-white"
         >
           Sign In
         </Link>
         <Link to="/register">
-          <Button variant="gold" size="sm">
-            Get Started
-          </Button>
+          <button className="rounded-full bg-white px-5 py-2 text-sm font-semibold font-sans text-foreground shadow-sm transition-all hover:bg-white/90 hover:shadow-md">
+            Book Now
+          </button>
         </Link>
       </div>
     </nav>
@@ -40,58 +56,40 @@ function Navbar() {
 
 function HeroSection() {
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-[#061f1c] via-[#0a3832] to-[#0f4d46]">
-      {/* Subtle decorative elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-1/4 -right-1/4 h-[800px] w-[800px] rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -bottom-1/4 -left-1/4 h-[600px] w-[600px] rounded-full bg-accent/5 blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/5 blur-3xl" />
-      </div>
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Hero background image */}
+      <img
+        src="/hero_image.jpeg"
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/50" />
 
       <Navbar />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 py-32 lg:px-12">
-        <div className="max-w-3xl space-y-8">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-sm">
-            <Sparkles className="h-4 w-4 text-accent" />
-            <span className="text-xs font-medium font-sans tracking-wide text-white/70">
-              AI-Powered Clinical Tools
-            </span>
-          </div>
-
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-32 lg:px-12">
+        <div className="max-w-2xl space-y-6">
           <h1 className="text-5xl leading-[1.1] font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
             Rehabilitation,
             <br />
-            <span className="text-accent">reimagined.</span>
+            reimagined.
           </h1>
 
-          <p className="max-w-xl text-lg font-sans leading-relaxed text-white/60">
-            Advanced physical therapy management that combines intelligent exercise matching,
-            streamlined documentation, and precision care planning — all in one elegant platform.
+          <p className="max-w-md text-base font-sans leading-relaxed text-white/70 sm:text-lg">
+            Physical therapy & VR rehabilitation. Coming soon to Colleyville, TX.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          <div className="pt-2">
             <Link to="/register">
-              <Button variant="gold" size="lg" className="gap-2">
-                Book an Appointment
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/login">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-white/20 text-white hover:bg-white/10 hover:text-white"
-              >
-                Clinical Login
-              </Button>
+              <button className="group inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-medium font-sans text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/50">
+                Book an appointment
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </button>
             </Link>
           </div>
         </div>
       </div>
-
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
   )
 }
@@ -106,9 +104,9 @@ function ServicesSection() {
     },
     {
       icon: Brain,
-      title: 'Neurological Therapy',
+      title: 'VR Therapy',
       description:
-        'Specialized treatment for stroke recovery, spinal cord injuries, and neurological conditions.',
+        'Immersive virtual reality rehabilitation for accelerated recovery and enhanced patient engagement.',
     },
     {
       icon: Heart,
@@ -125,7 +123,7 @@ function ServicesSection() {
   ]
 
   return (
-    <section className="py-24 lg:py-32">
+    <section id="services" className="py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium font-sans uppercase tracking-widest text-accent">
@@ -165,21 +163,23 @@ function ServicesSection() {
 
 function AboutSection() {
   return (
-    <section className="bg-white py-24 lg:py-32">
+    <section id="about" className="bg-white py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="grid items-center gap-16 lg:grid-cols-2">
-          {/* Image placeholder — warm gradient with decorative elements */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0a3832] to-[#1a6b5f] p-12 aspect-[4/3]">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-60" />
-            <div className="relative flex h-full flex-col justify-end text-white">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur-sm w-fit mb-4">
+          {/* Hero image as about visual */}
+          <div className="relative overflow-hidden rounded-2xl aspect-[4/3]">
+            <img
+              src="/hero_image.jpeg"
+              alt="Cross Health clinic reception"
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm w-fit mb-3">
                 <Shield className="h-4 w-4 text-accent" />
-                <span className="text-xs font-medium font-sans">Evidence-Based Care</span>
+                <span className="text-xs font-medium font-sans text-white">Evidence-Based Care</span>
               </div>
-              <h3 className="text-3xl font-semibold">Where science meets compassion</h3>
-              <p className="mt-3 max-w-sm font-sans text-white/60">
-                Our modern clinic combines warm, welcoming spaces with cutting-edge technology.
-              </p>
+              <h3 className="text-2xl sm:text-3xl font-semibold text-white">Where science meets compassion</h3>
             </div>
           </div>
 
@@ -196,7 +196,7 @@ function AboutSection() {
               therapists with AI-assisted exercise matching, streamlined SOAP
               documentation, and intelligent care planning.
             </p>
-            <div className="grid grid-cols-2 gap-6 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
               {[
                 { value: '98%', label: 'Patient satisfaction' },
                 { value: '2,500+', label: 'Treatments completed' },
@@ -245,7 +245,7 @@ function TechnologySection() {
   ]
 
   return (
-    <section className="py-24 lg:py-32">
+    <section id="technology" className="py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium font-sans uppercase tracking-widest text-accent">
@@ -312,7 +312,7 @@ function TestimonialsSection() {
   ]
 
   return (
-    <section className="bg-white py-24 lg:py-32">
+    <section id="testimonials" className="bg-white py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium font-sans uppercase tracking-widest text-accent">
@@ -323,7 +323,7 @@ function TestimonialsSection() {
           </h2>
         </div>
 
-        <div className="mt-16 grid gap-8 lg:grid-cols-3">
+        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((t) => (
             <div
               key={t.name}
@@ -356,36 +356,35 @@ function CTASection() {
   return (
     <section className="py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0a3832] via-primary to-[#1a6b5f] px-8 py-20 text-center lg:px-16">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-1/2 -right-1/4 h-[500px] w-[500px] rounded-full bg-white/5 blur-3xl" />
-            <div className="absolute -bottom-1/2 -left-1/4 h-[400px] w-[400px] rounded-full bg-accent/10 blur-3xl" />
-          </div>
-
-          <div className="relative z-10 mx-auto max-w-2xl space-y-6">
-            <h2 className="text-4xl font-semibold tracking-tight text-white lg:text-5xl">
-              Ready to elevate your practice?
-            </h2>
-            <p className="mx-auto max-w-lg font-sans text-lg text-white/60">
-              Join the growing community of physical therapy professionals
-              who trust Cross Health for intelligent clinical management.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-              <Link to="/register">
-                <Button variant="gold" size="lg" className="gap-2">
-                  Get Started Free
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </Link>
-              <Link to="/login">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-white/20 text-white hover:bg-white/10 hover:text-white"
-                >
-                  Schedule a Demo
-                </Button>
-              </Link>
+        <div className="relative overflow-hidden rounded-3xl">
+          <img
+            src="/hero_image.jpeg"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/60" />
+          <div className="relative z-10 px-8 py-20 text-center lg:px-16">
+            <div className="mx-auto max-w-2xl space-y-6">
+              <h2 className="text-4xl font-semibold tracking-tight text-white lg:text-5xl">
+                Ready to elevate your practice?
+              </h2>
+              <p className="mx-auto max-w-lg font-sans text-lg text-white/70">
+                Join the growing community of physical therapy professionals
+                who trust Cross Health for intelligent clinical management.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+                <Link to="/register">
+                  <Button variant="gold" size="lg" className="gap-2">
+                    Get Started Free
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link to="/login">
+                  <button className="rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-medium font-sans text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/50">
+                    Schedule a Demo
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -400,8 +399,8 @@ function Footer() {
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-primary">Cross</span>
-            <span className="text-lg font-bold text-foreground">Health</span>
+            <img src="/cross_health_logo.png" alt="CrossHealth" className="h-8 w-8 object-contain" />
+            <span className="text-lg font-bold text-foreground">Cross Health</span>
           </div>
 
           <div className="flex items-center gap-8">

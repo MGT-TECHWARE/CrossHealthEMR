@@ -400,7 +400,7 @@ function InsuranceForm({ initialData, onSubmit, onCancel, saving }) {
       </div>
 
       {/* Payer / Plan */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Payer Name *"
           name="payer_name"
@@ -419,7 +419,7 @@ function InsuranceForm({ initialData, onSubmit, onCancel, saving }) {
       </div>
 
       {/* Subscriber ID / Group */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Subscriber ID *"
           name="subscriber_id"
@@ -438,7 +438,7 @@ function InsuranceForm({ initialData, onSubmit, onCancel, saving }) {
       </div>
 
       {/* Subscriber Name / DOB */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Subscriber Name"
           name="subscriber_name"
@@ -475,7 +475,7 @@ function InsuranceForm({ initialData, onSubmit, onCancel, saving }) {
       </div>
 
       {/* Policy Dates */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Policy Effective Date"
           name="policy_effective_date"
@@ -493,7 +493,7 @@ function InsuranceForm({ initialData, onSubmit, onCancel, saving }) {
       </div>
 
       {/* Copay / Coinsurance */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Copay Amount"
           name="copay_amount"
@@ -517,7 +517,7 @@ function InsuranceForm({ initialData, onSubmit, onCancel, saving }) {
       </div>
 
       {/* Deductible / OOP Max */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Deductible Amount"
           name="deductible_amount"
@@ -581,7 +581,7 @@ function InsuranceForm({ initialData, onSubmit, onCancel, saving }) {
             {form.insurance_type === 'workers_comp' ? "Workers' Comp" : 'Auto Accident'} Details
           </p>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Claim Number"
               name="claim_number"
@@ -598,7 +598,7 @@ function InsuranceForm({ initialData, onSubmit, onCancel, saving }) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Adjuster Name"
               name="adjuster_name"
@@ -616,7 +616,7 @@ function InsuranceForm({ initialData, onSubmit, onCancel, saving }) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Attorney Name"
               name="attorney_name"

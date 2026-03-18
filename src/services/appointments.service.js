@@ -1,6 +1,6 @@
 import { supabase } from './supabase'
 
-export async function getAppointmentsByPT(ptId) {
+export async function getAppointmentsByPT() {
   const { data, error } = await supabase
     .from('appointments')
     .select('*, patient:patients(*)')

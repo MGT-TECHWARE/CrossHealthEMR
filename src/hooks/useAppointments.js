@@ -6,9 +6,12 @@ import {
   updateAppointmentStatus,
   checkInAppointment as checkInService,
 } from '../services/appointments.service'
+import { useAuthStore } from '../stores/authStore'
 
 export function useAppointments(filters = {}) {
-  const { patientId, ptId } = filters
+  const { patientId } = filters
+  const user = useAuthStore((s) => s.user)
+  const isAuthLoading = useAuthStore((s) => s.isLoading)
   const [appointments, setAppointments] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -22,8 +25,8 @@ export function useAppointments(filters = {}) {
 
       if (patientId) {
         data = await getAppointmentsByPatient(patientId)
-      } else if (ptId) {
-        data = await getAppointmentsByPT(ptId)
+      } else {
+        data = await getAppointmentsByPT()
       }
 
       setAppointments(data)
@@ -32,16 +35,17 @@ export function useAppointments(filters = {}) {
     } finally {
       setIsLoading(false)
     }
-  }, [patientId, ptId])
+  }, [patientId])
 
   useEffect(() => {
-    if (patientId || ptId) {
+    if (isAuthLoading) return
+    if (user) {
       fetchAppointments()
     } else {
       setAppointments([])
       setIsLoading(false)
     }
-  }, [fetchAppointments, patientId, ptId])
+  }, [fetchAppointments, user, isAuthLoading])
 
   async function createAppointment(appointmentData) {
     const data = await createAppointmentService(appointmentData)

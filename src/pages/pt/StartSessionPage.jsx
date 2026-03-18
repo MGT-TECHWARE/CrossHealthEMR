@@ -19,8 +19,8 @@ export default function StartSessionPage() {
   const navigate = useNavigate()
   const role = useAuthStore((s) => s.role)
   const base = role === 'admin' ? '/admin' : '/pt'
-  const { patients, isLoading: patientsLoading } = usePatients(user?.id)
-  const { appointments, isLoading: apptsLoading } = useAppointments({ ptId: user?.id })
+  const { patients, isLoading: patientsLoading } = usePatients()
+  const { appointments, isLoading: apptsLoading } = useAppointments()
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('appointments')
   const [showQuickAppt, setShowQuickAppt] = useState(false)

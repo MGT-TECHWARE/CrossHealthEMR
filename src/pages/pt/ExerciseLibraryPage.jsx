@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Sparkles, Loader2, ImagePlus } from 'lucide-react'
+import { Plus, Loader2 } from 'lucide-react'
 import PageContainer from '@/components/layout/PageContainer'
 import ExerciseGrid from '@/components/exercises/ExerciseGrid'
 import ExerciseFilterBar from '@/components/exercises/ExerciseFilterBar'
@@ -11,7 +11,6 @@ import Badge from '@/components/ui/Badge'
 import useExerciseLibrary from '@/hooks/useExerciseLibrary'
 import { createExercise } from '@/services/exercises.service'
 import { generateAndSaveExerciseImage } from '@/services/geminiImage.service'
-import { getExerciseImageUrl } from '@/utils/exerciseImage'
 import { BODY_PARTS } from '@/constants/bodyParts'
 
 const selectClass = 'w-full rounded-xl border border-border/50 bg-white px-4 py-2.5 text-sm font-sans shadow-sm transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15'
@@ -136,7 +135,7 @@ function AddExerciseForm({ onSave, onClose }) {
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="mb-1.5 block text-sm font-medium font-sans text-foreground/70">Difficulty</label>
           <select value={form.difficulty} onChange={set('difficulty')} className={selectClass}>
@@ -148,7 +147,7 @@ function AddExerciseForm({ onSave, onClose }) {
         <Input label="Video URL" value={form.video_url} onChange={set('video_url')} placeholder="https://..." />
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <Input label="Sets" type="number" min="1" value={form.sets} onChange={set('sets')} placeholder="3" />
         <Input label="Reps" type="number" min="1" value={form.reps} onChange={set('reps')} placeholder="10" />
         <Input label="Duration (sec)" type="number" min="1" value={form.duration_seconds} onChange={set('duration_seconds')} placeholder="30" />
@@ -230,33 +229,9 @@ export default function ExerciseLibraryPage() {
   const [selectedExercise, setSelectedExercise] = useState(null)
   const [showAddModal, setShowAddModal] = useState(false)
   const { exercises, isLoading, refetch } = useExerciseLibrary(filters)
-  const [batchStatus, setBatchStatus] = useState({ running: false, current: 0, total: 0, errors: 0 })
 
   const handleExerciseSaved = () => {
     setShowAddModal(false)
-    refetch()
-  }
-
-  const exercisesWithoutImages = (exercises || []).filter((e) => !getExerciseImageUrl(e))
-
-  const handleBatchGenerate = async () => {
-    const toGenerate = exercisesWithoutImages
-    if (toGenerate.length === 0) return
-
-    setBatchStatus({ running: true, current: 0, total: toGenerate.length, errors: 0 })
-
-    let errors = 0
-    for (let i = 0; i < toGenerate.length; i++) {
-      setBatchStatus((s) => ({ ...s, current: i + 1 }))
-      try {
-        await generateAndSaveExerciseImage(toGenerate[i])
-      } catch (err) {
-        console.error(`Failed to generate image for ${toGenerate[i].name}:`, err)
-        errors++
-      }
-    }
-
-    setBatchStatus({ running: false, current: 0, total: 0, errors })
     refetch()
   }
 
@@ -265,69 +240,15 @@ export default function ExerciseLibraryPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-bold font-sans tracking-tight text-foreground">
-              Exercise Library
-            </h1>
-            <p className="mt-1 text-sm font-sans text-muted-foreground">
-              {exercises?.length || 0} exercises{' '}
-              {exercisesWithoutImages.length > 0 && (
-                <span className="text-amber-600">
-                  ({exercisesWithoutImages.length} without images)
-                </span>
-              )}
-            </p>
-          </div>
-          <div className="flex items-center gap-2.5">
-            {exercisesWithoutImages.length > 0 && (
-              <Button
-                variant="outline"
-                className="gap-2"
-                onClick={handleBatchGenerate}
-                disabled={batchStatus.running}
-              >
-                {batchStatus.running ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    {batchStatus.current}/{batchStatus.total}
-                  </>
-                ) : (
-                  <>
-                    <ImagePlus className="h-4 w-4" />
-                    Generate All Images
-                  </>
-                )}
-              </Button>
-            )}
-            <Button className="gap-2" onClick={() => setShowAddModal(true)}>
-              <Plus className="h-4 w-4" />
-              Add Exercise
-            </Button>
-          </div>
+          <p className="text-sm font-sans text-muted-foreground">
+            {exercises?.length || 0} exercises
+          </p>
+          <Button className="gap-2" onClick={() => setShowAddModal(true)}>
+            <Plus className="h-4 w-4" />
+            Add Exercise
+          </Button>
         </div>
 
-        {/* Batch progress */}
-        {batchStatus.running && (
-          <div className="mt-4 rounded-xl bg-primary/5 border border-primary/10 p-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium font-sans text-foreground">
-                  Generating images...
-                </span>
-              </div>
-              <span className="text-sm font-sans text-muted-foreground">
-                {batchStatus.current} of {batchStatus.total}
-              </span>
-            </div>
-            <div className="h-1.5 rounded-full bg-primary/10 overflow-hidden">
-              <div
-                className="h-full bg-primary rounded-full transition-all duration-500"
-                style={{ width: `${(batchStatus.current / batchStatus.total) * 100}%` }}
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Filters */}

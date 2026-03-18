@@ -6,7 +6,7 @@ export default function PlanSection({ data = {}, onChange }) {
   return (
     <div className="space-y-4">
       {/* Treatment Frequency & Duration */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="mb-1.5 block text-xs font-medium font-sans text-foreground/80">
             Frequency

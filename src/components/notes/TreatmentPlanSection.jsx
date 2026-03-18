@@ -17,7 +17,7 @@ export default function TreatmentPlanSection({ data = {}, onChange, authorizatio
       </div>
 
       {/* Frequency & Duration */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label className="mb-1 block text-xs font-medium font-sans text-foreground/80">Frequency</label>
           <select

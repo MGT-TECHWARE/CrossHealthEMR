@@ -10,10 +10,9 @@ import usePatients from '@/hooks/usePatients'
 import { useAuthStore } from '@/stores/authStore'
 
 export default function PatientsListPage() {
-  const user = useAuthStore((s) => s.user)
   const role = useAuthStore((s) => s.role)
   const base = role === 'admin' ? '/admin' : '/pt'
-  const { patients, isLoading, searchPatients } = usePatients(user?.id)
+  const { patients, isLoading, searchPatients } = usePatients()
   const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState(null)

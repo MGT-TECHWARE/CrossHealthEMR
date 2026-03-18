@@ -19,7 +19,7 @@ const TABS = [
 
 export default function PatientChartTabs({ activeTab, onTabChange }) {
   return (
-    <div className="flex border-b border-border/60 overflow-x-auto">
+    <div className="flex border-b border-border/60 overflow-x-auto -mx-1 px-1">
       {TABS.map((tab) => {
         const isActive = activeTab === tab.key
         return (

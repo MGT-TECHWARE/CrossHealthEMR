@@ -1,6 +1,6 @@
 import { supabase } from './supabase'
 
-export async function getPatientsByPT(ptId) {
+export async function getPatientsByPT() {
   const { data, error } = await supabase
     .from('patients')
     .select('*')
@@ -54,7 +54,7 @@ export async function updatePatient(patientId, updates) {
   return data
 }
 
-export async function searchPatients(query, ptId) {
+export async function searchPatients(query) {
   let q = supabase
     .from('patients')
     .select('*')

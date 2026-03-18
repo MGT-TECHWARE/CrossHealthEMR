@@ -382,8 +382,8 @@ export default function HEPBuilder({
 
       {/* Full-screen calendar modal */}
       {showFullCalendar && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowFullCalendar(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto p-8" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-2 sm:p-4" onClick={() => setShowFullCalendar(false)}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto p-4 sm:p-8" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-xl font-semibold text-foreground">Home Exercise Plan Schedule</h2>
@@ -400,7 +400,7 @@ export default function HEPBuilder({
             {/* Exercise legend */}
             <div className="mt-6 pt-4 border-t border-border/40">
               <p className="text-xs font-semibold font-sans text-foreground uppercase tracking-wide mb-3">Exercises</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 {exercises.map((ex, i) => {
                   const freq = FREQUENCY_MAP[ex.frequency] || FREQUENCY_MAP['1x daily']
                   return (

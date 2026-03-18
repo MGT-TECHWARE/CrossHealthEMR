@@ -22,7 +22,7 @@ export default function SubjectiveSection({ data = {}, onChange, patient }) {
       </div>
 
       {/* Pain Level & Quality */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="mb-1.5 block text-xs font-medium font-sans text-foreground/80">
             Pain Level (0-10)
@@ -79,7 +79,7 @@ export default function SubjectiveSection({ data = {}, onChange, patient }) {
       </div>
 
       {/* PMH / Surgical History - prepopulated from patient */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="mb-1.5 block text-xs font-medium font-sans text-foreground/80">
             Past Medical History

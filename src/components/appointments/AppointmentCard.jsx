@@ -36,11 +36,11 @@ export default function AppointmentCard({
         </div>
       </div>
 
-      <div className="flex items-center gap-2 text-sm font-sans text-muted-foreground mb-1">
-        <Clock className="h-3.5 w-3.5" />
-        <span>{formatDate(appointment.scheduled_at)}</span>
+      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-sm font-sans text-muted-foreground mb-1">
+        <Clock className="h-3.5 w-3.5 shrink-0" />
+        <span className="text-xs sm:text-sm">{formatDate(appointment.scheduled_at)}</span>
         {appointment.duration_minutes && (
-          <span className="text-muted-foreground/60">({appointment.duration_minutes} min)</span>
+          <span className="text-muted-foreground/60 text-xs">({appointment.duration_minutes} min)</span>
         )}
         {appointment.payment_type && (
           <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${color.bg} ${color.text}`}>

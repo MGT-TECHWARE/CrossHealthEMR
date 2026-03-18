@@ -10,7 +10,7 @@ import { supabase } from '@/services/supabase'
 
 export default function TrackingPage() {
   const user = useAuthStore((s) => s.user)
-  const { patients, isLoading: patientsLoading } = usePatients(user?.id)
+  const { patients, isLoading: patientsLoading } = usePatients()
   const [authorizations, setAuthorizations] = useState([])
   const [prescriptions, setPrescriptions] = useState([])
   const [loading, setLoading] = useState(true)

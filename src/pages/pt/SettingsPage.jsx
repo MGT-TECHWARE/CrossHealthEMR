@@ -291,21 +291,21 @@ export default function SettingsPage() {
   return (
     <PageContainer title="Settings">
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Sidebar tabs */}
+        {/* Sidebar tabs — horizontal scroll on mobile, vertical on lg */}
         <div className="lg:w-56 shrink-0">
           <Card className="p-2">
-            <nav className="space-y-0.5">
+            <nav className="flex lg:flex-col gap-1 lg:gap-0.5 overflow-x-auto lg:overflow-visible -mx-1 px-1 pb-1 lg:pb-0">
               {TABS.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium font-sans transition-colors ${
+                  className={`flex items-center gap-2 lg:gap-2.5 whitespace-nowrap rounded-lg px-3 py-2 lg:py-2.5 text-sm font-medium font-sans transition-colors lg:w-full ${
                     activeTab === tab.key
                       ? 'bg-primary/10 text-primary'
                       : 'text-foreground/60 hover:bg-secondary hover:text-foreground'
                   }`}
                 >
-                  <tab.icon className="h-4 w-4" />
+                  <tab.icon className="h-4 w-4 shrink-0" />
                   {tab.label}
                 </button>
               ))}

@@ -6,10 +6,9 @@ import usePatients from '@/hooks/usePatients'
 import { useAuthStore } from '@/stores/authStore'
 
 export default function AddPatientPage() {
-  const user = useAuthStore((s) => s.user)
   const role = useAuthStore((s) => s.role)
   const base = role === 'admin' ? '/admin' : '/pt'
-  const { createPatient } = usePatients(user?.id)
+  const { createPatient } = usePatients()
   const navigate = useNavigate()
 
   async function handleSubmit(values) {

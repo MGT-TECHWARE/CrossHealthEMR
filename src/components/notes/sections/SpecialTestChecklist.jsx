@@ -40,8 +40,8 @@ export default function SpecialTestChecklist({ regions = [], data = {}, onChange
                   'text-muted-foreground bg-secondary/50 border-border/40'
 
                 return (
-                  <div key={row.test} className="flex items-center gap-2">
-                    <span className="text-xs font-sans text-foreground/80 w-44 shrink-0">{row.test}</span>
+                  <div key={row.test} className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2">
+                    <span className="text-xs font-sans text-foreground/80 sm:w-44 shrink-0">{row.test}</span>
                     <div className="flex gap-1">
                       {SPECIAL_TEST_RESULTS.map((opt) => (
                         <button

@@ -78,7 +78,7 @@ export default function DocumentUpload({ onUpload, isUploading }) {
 
       {file && (
         <>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="mb-1 block text-xs font-medium font-sans text-foreground/80">Document Type</label>
               <select

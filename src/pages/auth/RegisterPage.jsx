@@ -3,17 +3,21 @@ import RegisterForm from '@/components/auth/RegisterForm'
 export default function RegisterPage() {
   return (
     <div className="flex min-h-screen">
-      {/* Left — Branding panel */}
-      <div className="hidden lg:flex lg:w-1/2 lg:flex-col lg:justify-between bg-gradient-to-br from-[#0a3832] via-primary to-[#1a6b5f] p-12 text-white">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            <span className="text-white">Cross</span>{' '}
-            <span className="text-accent">Health</span>
-          </h2>
+      {/* Left — Branding panel with hero image */}
+      <div className="hidden lg:flex lg:w-1/2 lg:flex-col lg:justify-between relative overflow-hidden">
+        <img
+          src="/hero_image.jpeg"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+
+        <div className="relative z-10 p-12">
+          <img src="/cross_health_logo.png" alt="CrossHealth" className="h-14 w-14 object-contain" />
         </div>
 
-        <div className="space-y-6">
-          <h1 className="text-5xl leading-tight font-semibold tracking-tight">
+        <div className="relative z-10 p-12 space-y-6">
+          <h1 className="text-5xl leading-tight font-semibold tracking-tight text-white">
             Join the future
             <br />
             of care.
@@ -24,19 +28,18 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        <p className="text-sm font-sans text-white/40">
-          &copy; 2026 Cross Health. All rights reserved.
-        </p>
+        <div className="relative z-10 p-12">
+          <p className="text-sm font-sans text-white/40">
+            &copy; 2026 Cross Health. All rights reserved.
+          </p>
+        </div>
       </div>
 
       {/* Right — Register form */}
       <div className="flex w-full items-center justify-center bg-white px-6 lg:w-1/2">
         <div className="w-full max-w-md space-y-8">
-          <div className="lg:hidden text-center mb-4">
-            <h2 className="text-2xl font-bold">
-              <span className="text-primary">Cross</span>{' '}
-              <span className="text-foreground">Health</span>
-            </h2>
+          <div className="lg:hidden flex justify-center mb-4">
+            <img src="/cross_health_logo.png" alt="CrossHealth" className="h-16 w-16 object-contain" />
           </div>
 
           <div>

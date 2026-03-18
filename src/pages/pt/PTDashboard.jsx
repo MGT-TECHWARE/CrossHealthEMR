@@ -18,8 +18,8 @@ export default function PTDashboard() {
   const role = useAuthStore((s) => s.role)
   const base = role === 'admin' ? '/admin' : '/pt'
   const navigate = useNavigate()
-  const { appointments, isLoading, updateStatus, createAppointment } = useAppointments({ ptId: user?.id })
-  const { patients, isLoading: patientsLoading } = usePatients(user?.id)
+  const { appointments, isLoading, updateStatus, createAppointment } = useAppointments()
+  const { patients, isLoading: patientsLoading } = usePatients()
   const [showApptModal, setShowApptModal] = useState(false)
 
   const todayAppts = appointments?.filter((a) => {

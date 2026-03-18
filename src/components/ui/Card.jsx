@@ -6,7 +6,7 @@ export default function Card({ children, className, ...rest }) {
     <div
       className={twMerge(
         clsx(
-          'rounded-xl border border-border/60 bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md',
+          'rounded-xl border border-border/60 bg-white p-4 sm:p-6 shadow-sm transition-shadow duration-200 hover:shadow-md',
           className
         )
       )}

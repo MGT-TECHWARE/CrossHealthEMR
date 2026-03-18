@@ -51,7 +51,7 @@ export default function NoteSignatureModal({ open, onOpenChange, onSign, ptProfi
           placeholder="Dr. Jane Smith, PT, DPT"
         />
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Input
             label="License Number"
             value={licenseNumber}

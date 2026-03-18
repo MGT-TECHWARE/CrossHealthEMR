@@ -73,15 +73,10 @@ export default function Sidebar() {
     >
       {/* Logo + toggle */}
       <div className={clsx(
-        'flex h-16 items-center border-b border-border/60',
-        isCollapsed ? 'justify-center px-2' : 'justify-between px-4'
+        'flex items-center border-b border-border/60',
+        isCollapsed ? 'h-16 justify-center px-2' : 'h-24 justify-between px-4'
       )}>
-        {!isCollapsed && (
-          <div className="flex items-center gap-1.5">
-            <span className="text-xl font-bold text-primary">Cross</span>
-            <span className="text-xl font-bold text-foreground">Health</span>
-          </div>
-        )}
+        {!isCollapsed && <img src="/cross_health_logo.png" alt="CrossHealth" className="h-20 w-20 object-contain" />}
         <button
           onClick={toggle}
           className="flex items-center justify-center rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
@@ -138,11 +133,8 @@ export function MobileSidebar() {
 
       {/* Drawer */}
       <aside className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-white shadow-xl md:hidden">
-        <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
-          <div className="flex items-center gap-1.5">
-            <span className="text-xl font-bold text-primary">Cross</span>
-            <span className="text-xl font-bold text-foreground">Health</span>
-          </div>
+        <div className="flex h-24 items-center justify-between border-b border-border/60 px-4">
+          <img src="/cross_health_logo.png" alt="CrossHealth" className="h-20 w-20 object-contain" />
           <button
             onClick={closeMobile}
             className="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground"

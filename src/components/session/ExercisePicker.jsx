@@ -50,7 +50,7 @@ export default function ExercisePicker({ selectedExerciseIds, onAddExercise }) {
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         <select
           value={filters.bodyPart}
           onChange={(e) => setFilters((f) => ({ ...f, bodyPart: e.target.value }))}

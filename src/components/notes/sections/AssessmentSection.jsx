@@ -69,7 +69,7 @@ export default function AssessmentSection({ data = {}, onChange }) {
       )}
 
       {/* Goals */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="mb-1.5 block text-xs font-medium font-sans text-foreground/80">
             Short-Term Goals

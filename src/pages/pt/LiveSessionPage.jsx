@@ -237,9 +237,9 @@ export default function LiveSessionPage() {
         onEndSession={handleSaveAndComplete}
       />
 
-      <div ref={containerRef} className="flex-1 flex flex-col lg:flex-row gap-0 p-3">
+      <div ref={containerRef} className="flex-1 flex flex-col lg:flex-row gap-0 p-2 sm:p-3 overflow-y-auto lg:overflow-hidden">
         {/* Panel 1: SOAP Notes */}
-        <div style={{ width: `${sizes[0]}%` }} className="min-w-0">
+        <div style={{ width: window.innerWidth >= 1024 ? `${sizes[0]}%` : undefined }} className="min-w-0 w-full lg:w-auto">
           <Card className="h-full flex flex-col">
             <div className="flex items-center gap-2 mb-3">
               <FileText className="h-4 w-4 text-primary" />
@@ -263,7 +263,7 @@ export default function LiveSessionPage() {
         </div>
 
         {/* Panel 2: Exercise Library */}
-        <div style={{ width: `${sizes[1]}%` }} className="min-w-0 mt-3 lg:mt-0">
+        <div style={{ width: window.innerWidth >= 1024 ? `${sizes[1]}%` : undefined }} className="min-w-0 mt-3 lg:mt-0 w-full lg:w-auto">
           <Card className="h-full">
             <div className="flex items-center gap-2 mb-3">
               <Dumbbell className="h-4 w-4 text-primary" />
@@ -285,7 +285,7 @@ export default function LiveSessionPage() {
         </div>
 
         {/* Panel 3: Home Exercise Plan */}
-        <div style={{ width: `${sizes[2]}%` }} className="min-w-0 mt-3 lg:mt-0">
+        <div style={{ width: window.innerWidth >= 1024 ? `${sizes[2]}%` : undefined }} className="min-w-0 mt-3 lg:mt-0 w-full lg:w-auto">
           <Card className="h-full">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
