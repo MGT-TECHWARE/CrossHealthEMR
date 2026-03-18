@@ -15,6 +15,8 @@ import { Calendar, Users, Dumbbell, UserPlus, CalendarPlus } from 'lucide-react'
 
 export default function PTDashboard() {
   const user = useAuthStore((s) => s.user)
+  const role = useAuthStore((s) => s.role)
+  const base = role === 'admin' ? '/admin' : '/pt'
   const navigate = useNavigate()
   const { appointments, isLoading, updateStatus, createAppointment } = useAppointments({ ptId: user?.id })
   const { patients, isLoading: patientsLoading } = usePatients(user?.id)
@@ -70,7 +72,7 @@ export default function PTDashboard() {
           </div>
         </Card>
         <Card>
-          <Link to="/pt/exercises" className="flex items-center gap-4">
+          <Link to={`${base}/exercises`} className="flex items-center gap-4">
             <div className="rounded-lg bg-emerald-50 p-3">
               <Dumbbell className="h-6 w-6 text-primary" />
             </div>
@@ -84,7 +86,7 @@ export default function PTDashboard() {
 
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-3 mb-6">
-        <Link to="/pt/patients/new">
+        <Link to={`${base}/patients/new`}>
           <Button variant="outline" className="gap-2">
             <UserPlus className="h-4 w-4" />
             Add Patient
@@ -109,10 +111,10 @@ export default function PTDashboard() {
                   <AppointmentCard
                     key={appt.id}
                     appointment={appt}
-                    viewerRole="pt"
+                    viewerRole={role}
                     onConfirm={() => updateStatus(appt.id, 'confirmed')}
                     onCancel={() => updateStatus(appt.id, 'cancelled')}
-                    onClick={(a) => navigate(`/pt/session/${a.id}`)}
+                    onClick={(a) => navigate(`${base}/session/${a.id}`)}
                   />
                 ))}
               </div>
@@ -127,7 +129,7 @@ export default function PTDashboard() {
           <Card>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold font-sans">Recent Patients</h2>
-              <Link to="/pt/patients" className="text-sm font-sans text-primary hover:underline">
+              <Link to={`${base}/patients`} className="text-sm font-sans text-primary hover:underline">
                 View all
               </Link>
             </div>
@@ -139,7 +141,7 @@ export default function PTDashboard() {
                   <PatientCard
                     key={p.id}
                     patient={p}
-                    onClick={() => navigate(`/pt/patients/${p.id}`)}
+                    onClick={() => navigate(`${base}/patients/${p.id}`)}
                   />
                 ))}
               </div>

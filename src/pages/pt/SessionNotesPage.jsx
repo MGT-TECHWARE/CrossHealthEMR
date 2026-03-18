@@ -7,10 +7,13 @@ import Card from '@/components/ui/Card'
 import Spinner from '@/components/ui/Spinner'
 import useSessionNotes from '@/hooks/useSessionNotes'
 import { getAppointmentById } from '@/services/appointments.service'
+import { useAuthStore } from '@/stores/authStore'
 
 export default function SessionNotesPage() {
   const { appointmentId } = useParams()
   const navigate = useNavigate()
+  const role = useAuthStore((s) => s.role)
+  const base = role === 'admin' ? '/admin' : '/pt'
   const [appointment, setAppointment] = useState(null)
   const [loading, setLoading] = useState(true)
   const { notes, isLoading: notesLoading } = useSessionNotes({ appointmentId })
@@ -30,7 +33,7 @@ export default function SessionNotesPage() {
   }, [appointmentId])
 
   const handleRunAIMatch = () => {
-    navigate(`/pt/exercise-match/${appointmentId}`)
+    navigate(`${base}/exercise-match/${appointmentId}`)
   }
 
   if (loading) {

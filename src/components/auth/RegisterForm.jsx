@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
+import { useAuthStore } from '@/stores/authStore'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 
@@ -40,7 +41,9 @@ export default function RegisterForm() {
 
       // If session exists (auto-confirm enabled), navigate to dashboard
       if (data?.session) {
-        navigate('/pt/dashboard')
+        const userRole = values.role || 'pt'
+        const base = userRole === 'admin' ? '/admin' : '/pt'
+        navigate(`${base}/dashboard`)
       } else {
         // Email confirmation required — show success message
         setSuccess(true)

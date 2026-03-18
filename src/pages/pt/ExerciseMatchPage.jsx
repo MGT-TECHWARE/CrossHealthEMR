@@ -5,10 +5,13 @@ import AIMatchPanel from '@/components/ai/AIMatchPanel'
 import Spinner from '@/components/ui/Spinner'
 import useSessionNotes from '@/hooks/useSessionNotes'
 import { getAppointmentById } from '@/services/appointments.service'
+import { useAuthStore } from '@/stores/authStore'
 
 export default function ExerciseMatchPage() {
   const { appointmentId } = useParams()
   const navigate = useNavigate()
+  const role = useAuthStore((s) => s.role)
+  const base = role === 'admin' ? '/admin' : '/pt'
   const { notes, isLoading } = useSessionNotes({ appointmentId })
   const [appointment, setAppointment] = useState(null)
 
@@ -30,7 +33,7 @@ export default function ExerciseMatchPage() {
     : ''
 
   const handlePlanCreated = () => {
-    navigate('/pt/dashboard')
+    navigate(`${base}/dashboard`)
   }
 
   if (isLoading) return <Spinner size="lg" />

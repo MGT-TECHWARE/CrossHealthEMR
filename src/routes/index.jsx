@@ -13,6 +13,8 @@ import StartSessionPage from '@/pages/pt/StartSessionPage'
 import LiveSessionPage from '@/pages/pt/LiveSessionPage'
 import ExerciseMatchPage from '@/pages/pt/ExerciseMatchPage'
 import ExerciseLibraryPage from '@/pages/pt/ExerciseLibraryPage'
+import TrackingPage from '@/pages/pt/TrackingPage'
+import SettingsPage from '@/pages/pt/SettingsPage'
 
 export const router = createBrowserRouter([
   { path: '/', element: <LandingPage /> },
@@ -33,6 +35,8 @@ export const router = createBrowserRouter([
           { path: '/pt/session/:appointmentId', element: <LiveSessionPage /> },
           { path: '/pt/exercise-match/:appointmentId', element: <ExerciseMatchPage /> },
           { path: '/pt/exercises', element: <ExerciseLibraryPage /> },
+          { path: '/pt/tracking', element: <TrackingPage /> },
+          { path: '/pt/settings', element: <SettingsPage /> },
         ],
       },
       {
@@ -44,7 +48,11 @@ export const router = createBrowserRouter([
           { path: '/admin/patients', element: <PatientsListPage /> },
           { path: '/admin/patients/new', element: <AddPatientPage /> },
           { path: '/admin/patients/:patientId', element: <PatientChartPage /> },
+          { path: '/admin/session/:appointmentId', element: <LiveSessionPage /> },
+          { path: '/admin/exercise-match/:appointmentId', element: <ExerciseMatchPage /> },
           { path: '/admin/exercises', element: <ExerciseLibraryPage /> },
+          { path: '/admin/tracking', element: <TrackingPage /> },
+          { path: '/admin/settings', element: <SettingsPage /> },
         ],
       },
     ],

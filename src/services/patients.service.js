@@ -4,7 +4,6 @@ export async function getPatientsByPT(ptId) {
   const { data, error } = await supabase
     .from('patients')
     .select('*')
-    .eq('created_by', ptId)
     .order('last_name')
 
   if (error) throw error
@@ -62,9 +61,7 @@ export async function searchPatients(query, ptId) {
     .or(`first_name.ilike.%${query}%,last_name.ilike.%${query}%,email.ilike.%${query}%`)
     .order('last_name')
 
-  if (ptId) {
-    q = q.eq('created_by', ptId)
-  }
+  // All patients visible to all users for now
 
   const { data, error } = await q
   if (error) throw error

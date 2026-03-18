@@ -3,14 +3,14 @@ import PageContainer from '@/components/layout/PageContainer'
 import PatientIntakeForm from '@/components/patients/PatientIntakeForm'
 import Card from '@/components/ui/Card'
 import { useAuthStore } from '@/stores/authStore'
-import { updatePatientProfile } from '@/services/patients.service'
+import { updatePatient } from '@/services/patients.service'
 
 export default function PatientProfilePage() {
   const user = useAuthStore((s) => s.user)
   const [saved, setSaved] = useState(false)
 
   const handleSubmit = async (data) => {
-    await updatePatientProfile(user.id, data)
+    await updatePatient(user.id, data)
     setSaved(true)
     setTimeout(() => setSaved(false), 3000)
   }

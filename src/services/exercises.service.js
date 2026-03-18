@@ -6,7 +6,7 @@ export async function getAllExercises(filters = {}) {
     .select('*')
 
   if (filters.body_part) {
-    query = query.eq('body_part', filters.body_part)
+    query = query.contains('body_part', [filters.body_part])
   }
 
   if (filters.difficulty) {

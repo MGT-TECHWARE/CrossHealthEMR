@@ -12,22 +12,40 @@ import { useNoteStore } from '@/stores/noteStore'
 import { useSessionNotes } from '@/hooks/useSessionNotes'
 import { useAuthStore } from '@/stores/authStore'
 import { getAppointmentById, updateAppointmentStatus } from '@/services/appointments.service'
+import { getLatestNoteForPatient } from '@/services/notes.service'
 import { createPlan } from '@/services/exercisePlan.service'
 import { getActiveAuthorization, incrementVisitsUsed } from '@/services/authorizations.service'
+import { structuredToText } from '@/schemas/note.schema'
 import useResizablePanels from '@/hooks/useResizablePanels'
+import { NOTE_TYPE_LABELS } from '@/constants/noteTypes'
+
+// Map appointment_type to note_type
+function appointmentToNoteType(appointmentType) {
+  const map = {
+    initial_eval: 'initial_evaluation',
+    follow_up: 'daily_note',
+    re_eval: 're_evaluation',
+    discharge: 'discharge',
+    wellness: 'daily_note',
+  }
+  return map[appointmentType] || 'daily_note'
+}
 
 export default function LiveSessionPage() {
   const { appointmentId } = useParams()
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
+  const role = useAuthStore((s) => s.role)
+  const base = role === 'admin' ? '/admin' : '/pt'
   const timer = useSessionTimer()
-  const { draft, clearDraft } = useNoteStore()
+  const { draft, clearDraft, updateDraft } = useNoteStore()
   const { saveNote } = useSessionNotes()
 
   const [appointment, setAppointment] = useState(null)
   const [loading, setLoading] = useState(true)
   const [hepExercises, setHepExercises] = useState([])
   const [saveStatus, setSaveStatus] = useState('idle')
+  const [noteType, setNoteType] = useState('daily_note')
   const { sizes, containerRef, handleMouseDown } = useResizablePanels(3, 15)
 
   useEffect(() => {
@@ -35,6 +53,20 @@ export default function LiveSessionPage() {
       try {
         const data = await getAppointmentById(appointmentId)
         setAppointment(data)
+        // Set note type from appointment type
+        const nt = appointmentToNoteType(data.appointment_type)
+        setNoteType(nt)
+        updateDraft('note_type', nt)
+
+        // Load carried exercises from previous note
+        if (data.patient_id) {
+          try {
+            const prevNote = await getLatestNoteForPatient(data.patient_id)
+            if (prevNote?.carried_exercises?.length > 0) {
+              updateDraft('carried_exercises', prevNote.carried_exercises)
+            }
+          } catch {}
+        }
       } catch (err) {
         console.error('Failed to load appointment:', err)
       } finally {
@@ -84,19 +116,37 @@ export default function LiveSessionPage() {
     })
   }
 
+  const buildNotePayload = (status = 'draft') => {
+    const textFields = structuredToText(draft)
+    return {
+      appointment_id: appointmentId,
+      patient_id: appointment?.patient_id,
+      pt_id: user?.id,
+      ...textFields,
+      subjective_data: draft.subjective_data || {},
+      objective_data: draft.objective_data || {},
+      assessment_data: draft.assessment_data || {},
+      plan_data: draft.plan_data || {},
+      note_type: noteType,
+      status,
+      complexity: draft.assessment_data?.complexity || null,
+      total_treatment_minutes: timer.totalMinutes,
+      time_in: timer.startTime ? new Date(timer.startTime).toISOString() : null,
+      time_out: status === 'completed' ? new Date().toISOString() : null,
+      carried_exercises: hepExercises.map((e) => ({
+        exercise_id: e.id,
+        name: e.name,
+        sets: e.sets,
+        reps: e.reps,
+      })),
+      treatment_plan: draft.plan_data || {},
+    }
+  }
+
   const handleSaveDraft = async () => {
     setSaveStatus('saving')
     try {
-      await saveNote({
-        appointment_id: appointmentId,
-        patient_id: appointment?.patient_id,
-        pt_id: user?.id,
-        subjective: draft.subjective || '',
-        objective: draft.objective || '',
-        assessment: draft.assessment || '',
-        plan: draft.plan || '',
-        total_treatment_minutes: timer.totalMinutes,
-      })
+      await saveNote(buildNotePayload('draft'))
       setSaveStatus('saved')
       setTimeout(() => setSaveStatus('idle'), 2000)
     } catch (err) {
@@ -108,16 +158,7 @@ export default function LiveSessionPage() {
   const handleSaveAndComplete = async () => {
     setSaveStatus('saving')
     try {
-      const note = await saveNote({
-        appointment_id: appointmentId,
-        patient_id: appointment?.patient_id,
-        pt_id: user?.id,
-        subjective: draft.subjective || '',
-        objective: draft.objective || '',
-        assessment: draft.assessment || '',
-        plan: draft.plan || '',
-        total_treatment_minutes: timer.totalMinutes,
-      })
+      const note = await saveNote(buildNotePayload('completed'))
 
       if (hepExercises.length > 0) {
         await createPlan({
@@ -152,7 +193,7 @@ export default function LiveSessionPage() {
       timer.stop()
       setSaveStatus('saved')
       clearDraft()
-      setTimeout(() => navigate('/pt/dashboard'), 1000)
+      setTimeout(() => navigate(`${base}/dashboard`), 1000)
     } catch (err) {
       console.error('Save and complete failed:', err)
       setSaveStatus('error')
@@ -172,7 +213,7 @@ export default function LiveSessionPage() {
       <div className="flex h-screen items-center justify-center bg-background">
         <Card className="max-w-md text-center p-8">
           <p className="text-foreground font-sans font-semibold mb-2">Appointment not found</p>
-          <button onClick={() => navigate('/pt/dashboard')} className="text-primary font-sans text-sm hover:underline">
+          <button onClick={() => navigate(`${base}/dashboard`)} className="text-primary font-sans text-sm hover:underline">
             Return to Dashboard
           </button>
         </Card>
@@ -205,7 +246,10 @@ export default function LiveSessionPage() {
               <h3 className="text-sm font-semibold font-sans text-foreground">SOAP Notes</h3>
             </div>
             <div className="flex-1">
-              <LiveSOAPEditor />
+              <LiveSOAPEditor
+                noteType={noteType}
+                patient={appointment.patient}
+              />
             </div>
           </Card>
         </div>

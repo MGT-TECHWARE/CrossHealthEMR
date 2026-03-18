@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Stethoscope, CalendarCheck, UserPlus, Plus } from 'lucide-react'
+import { Search, Stethoscope, CalendarCheck, UserPlus, Plus, Users } from 'lucide-react'
 import PageContainer from '@/components/layout/PageContainer'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
@@ -17,6 +17,8 @@ import { formatDate } from '@/utils/formatDate'
 export default function StartSessionPage() {
   const user = useAuthStore((s) => s.user)
   const navigate = useNavigate()
+  const role = useAuthStore((s) => s.role)
+  const base = role === 'admin' ? '/admin' : '/pt'
   const { patients, isLoading: patientsLoading } = usePatients(user?.id)
   const { appointments, isLoading: apptsLoading } = useAppointments({ ptId: user?.id })
   const [searchQuery, setSearchQuery] = useState('')
@@ -51,7 +53,7 @@ export default function StartSessionPage() {
 
   // Start session from existing appointment
   const handleStartFromAppointment = (appointmentId) => {
-    navigate(`/pt/session/${appointmentId}`)
+    navigate(`${base}/session/${appointmentId}`)
   }
 
   // Quick-create appointment and start session
@@ -67,7 +69,7 @@ export default function StartSessionPage() {
         reason: quickReason || 'Walk-in session',
       })
       setShowQuickAppt(false)
-      navigate(`/pt/session/${appt.id}`)
+      navigate(`${base}/session/${appt.id}`)
     } catch (err) {
       console.error('Failed to create appointment:', err)
     } finally {

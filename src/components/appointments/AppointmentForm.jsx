@@ -5,6 +5,23 @@ import { appointmentSchema } from '@/schemas/appointment.schema'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 
+const APPOINTMENT_TYPES = [
+  { value: 'initial_eval', label: 'Initial Evaluation' },
+  { value: 'follow_up', label: 'Follow Up' },
+  { value: 're_eval', label: 'Re-Evaluation' },
+  { value: 'discharge', label: 'Discharge' },
+  { value: 'wellness', label: 'Wellness' },
+]
+
+const PAYMENT_TYPES = [
+  { value: 'cash', label: 'Cash Pay' },
+  { value: 'insurance', label: 'Insurance' },
+  { value: 'medicare', label: 'Medicare' },
+  { value: 'telehealth', label: 'Telehealth' },
+  { value: 'workers_comp', label: 'Workers Comp' },
+  { value: 'auto', label: 'Auto Accident' },
+]
+
 export default function AppointmentForm({ onSubmit, patients = [], availablePTs = [], currentPTId }) {
   const {
     register,
@@ -15,6 +32,8 @@ export default function AppointmentForm({ onSubmit, patients = [], availablePTs 
     defaultValues: {
       pt_id: currentPTId || '',
       duration_minutes: 60,
+      appointment_type: 'follow_up',
+      payment_type: 'cash',
     },
   })
 
@@ -73,6 +92,36 @@ export default function AppointmentForm({ onSubmit, patients = [], availablePTs 
         error={errors.scheduled_at?.message}
         {...register('scheduled_at')}
       />
+
+      {/* Appointment Type & Payment Type */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="mb-1.5 block text-sm font-medium font-sans text-foreground/80">
+            Appointment Type
+          </label>
+          <select
+            {...register('appointment_type')}
+            className="w-full rounded-lg border border-border bg-white px-4 py-2.5 text-sm font-sans shadow-sm transition-all duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          >
+            {APPOINTMENT_TYPES.map((t) => (
+              <option key={t.value} value={t.value}>{t.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="mb-1.5 block text-sm font-medium font-sans text-foreground/80">
+            Payment Type
+          </label>
+          <select
+            {...register('payment_type')}
+            className="w-full rounded-lg border border-border bg-white px-4 py-2.5 text-sm font-sans shadow-sm transition-all duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          >
+            {PAYMENT_TYPES.map((t) => (
+              <option key={t.value} value={t.value}>{t.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <div>
         <label className="mb-1.5 block text-sm font-medium font-sans text-foreground/80">

@@ -11,14 +11,20 @@ import {
 import PageContainer from '@/components/layout/PageContainer'
 import AppointmentCard from '@/components/appointments/AppointmentCard'
 import AppointmentForm from '@/components/appointments/AppointmentForm'
+import AppointmentPopover from '@/components/appointments/AppointmentPopover'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
-import Badge from '@/components/ui/Badge'
 import Modal from '@/components/ui/Modal'
 import Spinner from '@/components/ui/Spinner'
 import useAppointments from '@/hooks/useAppointments'
 import usePatients from '@/hooks/usePatients'
 import { useAuthStore } from '@/stores/authStore'
+import { getAppointmentColor, PAYMENT_TYPE_COLORS } from '@/constants/appointmentColors'
+
+function useBase() {
+  const role = useAuthStore((s) => s.role)
+  return role === 'admin' ? '/admin' : '/pt'
+}
 
 const VIEWS = [
   { key: 'month', label: 'Month', icon: LayoutGrid },
@@ -39,15 +45,12 @@ function getMonthDays(year, month) {
   const startPad = firstDay.getDay()
   const days = []
 
-  // Pad from previous month
   for (let i = startPad - 1; i >= 0; i--) {
     days.push({ date: new Date(year, month, -i), isCurrentMonth: false })
   }
-  // Current month
   for (let d = 1; d <= lastDay.getDate(); d++) {
     days.push({ date: new Date(year, month, d), isCurrentMonth: true })
   }
-  // Pad to fill grid (6 rows)
   while (days.length < 42) {
     const next = days.length - startPad - lastDay.getDate() + 1
     days.push({ date: new Date(year, month + 1, next), isCurrentMonth: false })
@@ -96,11 +99,11 @@ function MonthView({ days, appointments, today, onDayClick }) {
                 {dayAppts.slice(0, 3).map((appt) => {
                   const name = appt.patient ? `${appt.patient.first_name} ${appt.patient.last_name?.[0]}.` : 'Patient'
                   const time = new Date(appt.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-                  const statusColor = appt.status === 'confirmed' ? 'bg-primary' : appt.status === 'pending' ? 'bg-amber-500' : 'bg-muted-foreground/40'
+                  const color = getAppointmentColor(appt.payment_type)
                   return (
-                    <div key={appt.id} className="flex items-center gap-1 px-1 py-0.5 rounded text-[10px] font-sans truncate bg-primary/5">
-                      <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${statusColor}`} />
-                      <span className="truncate">{time} {name}</span>
+                    <div key={appt.id} className={`flex items-center gap-1 px-1 py-0.5 rounded text-[10px] font-sans truncate ${color.bg}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${color.dot}`} />
+                      <span className={`truncate ${color.text}`}>{time} {name}</span>
                     </div>
                   )
                 })}
@@ -116,11 +119,10 @@ function MonthView({ days, appointments, today, onDayClick }) {
   )
 }
 
-function WeekView({ weekDays, appointments, today, onAppointmentClick }) {
+function WeekView({ weekDays, appointments, today, onAppointmentClick, onAppointmentDoubleClick }) {
   return (
     <div className="overflow-x-auto">
       <div className="min-w-[700px]">
-        {/* Header */}
         <div className="grid grid-cols-[60px_repeat(7,1fr)] border-b border-border/60">
           <div />
           {weekDays.map((d, i) => {
@@ -133,7 +135,6 @@ function WeekView({ weekDays, appointments, today, onAppointmentClick }) {
             )
           })}
         </div>
-        {/* Time grid */}
         <div className="relative">
           {HOURS.map((hour) => (
             <div key={hour} className="grid grid-cols-[60px_repeat(7,1fr)] border-b border-border/20 h-16">
@@ -150,13 +151,15 @@ function WeekView({ weekDays, appointments, today, onAppointmentClick }) {
                     {dayAppts.map((appt) => {
                       const name = appt.patient ? `${appt.patient.first_name} ${appt.patient.last_name?.[0]}.` : 'Patient'
                       const time = new Date(appt.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+                      const color = getAppointmentColor(appt.payment_type)
                       return (
                         <div
                           key={appt.id}
-                          onClick={() => onAppointmentClick(appt)}
-                          className="absolute inset-x-0.5 top-0.5 rounded bg-primary/10 border border-primary/20 px-1.5 py-0.5 cursor-pointer hover:bg-primary/20 transition-colors text-[11px] font-sans truncate"
+                          onClick={(e) => { e.stopPropagation(); onAppointmentClick(appt) }}
+                          onDoubleClick={(e) => { e.stopPropagation(); onAppointmentDoubleClick(appt) }}
+                          className={`absolute inset-x-0.5 top-0.5 rounded ${color.bg} border ${color.border} px-1.5 py-0.5 cursor-pointer hover:opacity-80 transition-opacity text-[11px] font-sans truncate`}
                         >
-                          <span className="font-medium text-primary">{time}</span>{' '}
+                          <span className={`font-medium ${color.text}`}>{time}</span>{' '}
                           <span className="text-foreground/70">{name}</span>
                         </div>
                       )
@@ -172,7 +175,7 @@ function WeekView({ weekDays, appointments, today, onAppointmentClick }) {
   )
 }
 
-function DayView({ date, appointments, onAppointmentClick }) {
+function DayView({ date, appointments, onAppointmentClick, onAppointmentDoubleClick }) {
   const dayAppts = appointments
     .filter((a) => isSameDay(new Date(a.scheduled_at), date))
     .sort((a, b) => new Date(a.scheduled_at) - new Date(b.scheduled_at))
@@ -191,12 +194,16 @@ function DayView({ date, appointments, onAppointmentClick }) {
                 {hourAppts.length > 0 ? (
                   <div className="space-y-2">
                     {hourAppts.map((appt) => (
-                      <AppointmentCard
+                      <div
                         key={appt.id}
-                        appointment={appt}
-                        viewerRole="pt"
-                        onClick={onAppointmentClick}
-                      />
+                        onDoubleClick={() => onAppointmentDoubleClick(appt)}
+                      >
+                        <AppointmentCard
+                          appointment={appt}
+                          viewerRole="pt"
+                          onClick={onAppointmentClick}
+                        />
+                      </div>
                     ))}
                   </div>
                 ) : null}
@@ -214,14 +221,30 @@ function DayView({ date, appointments, onAppointmentClick }) {
   )
 }
 
+// Color Legend
+function ColorLegend() {
+  return (
+    <div className="flex flex-wrap gap-3 px-1">
+      {Object.entries(PAYMENT_TYPE_COLORS).map(([key, color]) => (
+        <div key={key} className="flex items-center gap-1.5">
+          <span className={`h-2.5 w-2.5 rounded-full ${color.dot}`} />
+          <span className="text-[11px] font-sans text-muted-foreground">{color.label}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function SchedulePage() {
   const user = useAuthStore((s) => s.user)
+  const base = useBase()
   const navigate = useNavigate()
-  const { appointments, isLoading, createAppointment, updateStatus } = useAppointments({ ptId: user?.id })
+  const { appointments, isLoading, createAppointment, updateStatus, checkIn } = useAppointments({ ptId: user?.id })
   const { patients } = usePatients(user?.id)
   const [showModal, setShowModal] = useState(false)
   const [view, setView] = useState('month')
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [popoverAppt, setPopoverAppt] = useState(null)
 
   const today = new Date()
 
@@ -257,7 +280,23 @@ export default function SchedulePage() {
   }
 
   const handleAppointmentClick = (appointment) => {
-    navigate(`/pt/session/${appointment.id}`)
+    setPopoverAppt(appointment)
+  }
+
+  const handleAppointmentDoubleClick = (appointment) => {
+    if (appointment.patient_id) {
+      navigate(`${base}/patients/${appointment.patient_id}`)
+    }
+  }
+
+  const handleCheckIn = async (appointmentId) => {
+    await checkIn(appointmentId, user?.id)
+    setPopoverAppt(null)
+  }
+
+  const handleNoShow = async (appointmentId) => {
+    await updateStatus(appointmentId, 'no_show')
+    setPopoverAppt(null)
   }
 
   const handleCreateAppointment = async (values) => {
@@ -289,7 +328,6 @@ export default function SchedulePage() {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* View toggle */}
           <div className="flex items-center rounded-lg border border-border overflow-hidden">
             {VIEWS.map((v) => (
               <button
@@ -312,35 +350,58 @@ export default function SchedulePage() {
         </div>
       </div>
 
+      {/* Color Legend */}
+      <div className="mb-3">
+        <ColorLegend />
+      </div>
+
       {/* Calendar view */}
       {isLoading ? (
         <div className="flex justify-center py-12"><Spinner size="lg" /></div>
       ) : (
-        <Card className="p-0 overflow-hidden">
-          {view === 'month' && (
-            <MonthView
-              days={monthDays}
-              appointments={appointments || []}
-              today={today}
-              onDayClick={handleDayClick}
-            />
+        <div className="relative">
+          <Card className="p-0 overflow-hidden">
+            {view === 'month' && (
+              <MonthView
+                days={monthDays}
+                appointments={appointments || []}
+                today={today}
+                onDayClick={handleDayClick}
+              />
+            )}
+            {view === 'week' && (
+              <WeekView
+                weekDays={weekDays}
+                appointments={appointments || []}
+                today={today}
+                onAppointmentClick={handleAppointmentClick}
+                onAppointmentDoubleClick={handleAppointmentDoubleClick}
+              />
+            )}
+            {view === 'day' && (
+              <DayView
+                date={currentDate}
+                appointments={appointments || []}
+                onAppointmentClick={handleAppointmentClick}
+                onAppointmentDoubleClick={handleAppointmentDoubleClick}
+              />
+            )}
+          </Card>
+
+          {/* Popover */}
+          {popoverAppt && (
+            <div className="fixed inset-0 z-40" onClick={() => setPopoverAppt(null)}>
+              <div className="absolute top-1/3 left-1/2 -translate-x-1/2" onClick={(e) => e.stopPropagation()}>
+                <AppointmentPopover
+                  appointment={popoverAppt}
+                  onClose={() => setPopoverAppt(null)}
+                  onCheckIn={handleCheckIn}
+                  onNoShow={handleNoShow}
+                />
+              </div>
+            </div>
           )}
-          {view === 'week' && (
-            <WeekView
-              weekDays={weekDays}
-              appointments={appointments || []}
-              today={today}
-              onAppointmentClick={handleAppointmentClick}
-            />
-          )}
-          {view === 'day' && (
-            <DayView
-              date={currentDate}
-              appointments={appointments || []}
-              onAppointmentClick={handleAppointmentClick}
-            />
-          )}
-        </Card>
+        </div>
       )}
 
       <Modal open={showModal} onOpenChange={setShowModal} title="New Appointment">

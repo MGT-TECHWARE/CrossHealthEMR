@@ -11,6 +11,8 @@ import { useAuthStore } from '@/stores/authStore'
 
 export default function PatientsListPage() {
   const user = useAuthStore((s) => s.user)
+  const role = useAuthStore((s) => s.role)
+  const base = role === 'admin' ? '/admin' : '/pt'
   const { patients, isLoading, searchPatients } = usePatients(user?.id)
   const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
@@ -41,7 +43,7 @@ export default function PatientsListPage() {
             className="w-full rounded-lg border border-border bg-white pl-10 pr-4 py-2.5 text-sm font-sans shadow-sm transition-all duration-200 placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
         </div>
-        <Link to="/pt/patients/new">
+        <Link to={`${base}/patients/new`}>
           <Button className="gap-2">
             <UserPlus className="h-4 w-4" />
             Add Patient
@@ -59,7 +61,7 @@ export default function PatientsListPage() {
             <PatientCard
               key={patient.id}
               patient={patient}
-              onClick={() => navigate(`/pt/patients/${patient.id}`)}
+              onClick={() => navigate(`${base}/patients/${patient.id}`)}
             />
           ))}
         </div>
@@ -69,7 +71,7 @@ export default function PatientsListPage() {
             {searchQuery ? 'No patients found matching your search.' : 'No patients yet.'}
           </p>
           {!searchQuery && (
-            <Link to="/pt/patients/new">
+            <Link to={`${base}/patients/new`}>
               <Button variant="outline" className="gap-2">
                 <UserPlus className="h-4 w-4" />
                 Add Your First Patient

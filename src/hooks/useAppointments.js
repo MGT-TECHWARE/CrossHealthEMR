@@ -4,6 +4,7 @@ import {
   getAppointmentsByPT,
   createAppointment as createAppointmentService,
   updateAppointmentStatus,
+  checkInAppointment as checkInService,
 } from '../services/appointments.service'
 
 export function useAppointments(filters = {}) {
@@ -54,12 +55,19 @@ export function useAppointments(filters = {}) {
     return data
   }
 
+  async function checkIn(id, userId) {
+    const data = await checkInService(id, userId)
+    await fetchAppointments()
+    return data
+  }
+
   return {
     appointments,
     isLoading,
     error,
     createAppointment,
     updateStatus,
+    checkIn,
     refetch: fetchAppointments,
   }
 }

@@ -1,6 +1,7 @@
 import { Play, Pause, Square, ArrowLeft, LogOut } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
+import { useAuthStore } from '@/stores/authStore'
 import Button from '@/components/ui/Button'
 
 export default function SessionHeader({
@@ -14,6 +15,8 @@ export default function SessionHeader({
 }) {
   const navigate = useNavigate()
   const { logout } = useAuth()
+  const role = useAuthStore((s) => s.role)
+  const base = role === 'admin' ? '/admin' : '/pt'
   const timerColor = timer.isRunning
     ? 'text-primary'
     : timer.isPaused
@@ -27,7 +30,7 @@ export default function SessionHeader({
       {/* Back + Patient info */}
       <div className="flex items-center gap-3 min-w-0">
         <button
-          onClick={() => navigate('/pt/dashboard')}
+          onClick={() => navigate(`${base}/dashboard`)}
           className="flex items-center justify-center rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors shrink-0"
           title="Back to Dashboard"
         >

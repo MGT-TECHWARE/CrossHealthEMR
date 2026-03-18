@@ -5,11 +5,13 @@ import {
   Users,
   Dumbbell,
   Shield,
+  Settings,
   LogOut,
   Stethoscope,
   PanelLeftClose,
   PanelLeftOpen,
   X,
+  Activity,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSidebarStore } from '@/stores/sidebarStore'
@@ -21,6 +23,8 @@ const ptLinks = [
   { to: '/pt/live-session', label: 'Live Session', icon: Stethoscope },
   { to: '/pt/patients', label: 'Patients', icon: Users },
   { to: '/pt/exercises', label: 'Exercise Library', icon: Dumbbell },
+  { to: '/pt/tracking', label: 'Tracking', icon: Activity },
+  { to: '/pt/settings', label: 'Settings', icon: Settings },
 ]
 
 const adminLinks = [
@@ -29,7 +33,8 @@ const adminLinks = [
   { to: '/admin/live-session', label: 'Live Session', icon: Stethoscope },
   { to: '/admin/patients', label: 'Patients', icon: Users },
   { to: '/admin/exercises', label: 'Exercise Library', icon: Dumbbell },
-  { to: '/admin/settings', label: 'Settings', icon: Shield },
+  { to: '/admin/tracking', label: 'Tracking', icon: Activity },
+  { to: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 
 function NavItem({ to, label, icon: Icon, collapsed }) {

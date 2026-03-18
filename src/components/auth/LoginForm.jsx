@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
+import { useAuthStore } from '@/stores/authStore'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 
@@ -33,7 +34,9 @@ export default function LoginForm() {
       const data = await login(values.email, values.password)
 
       if (data?.user?.id) {
-        navigate('/pt/dashboard')
+        const userRole = useAuthStore.getState().role
+        const base = userRole === 'admin' ? '/admin' : '/pt'
+        navigate(`${base}/dashboard`)
       }
     } catch (err) {
       setServerError(err.message || 'Login failed. Please try again.')

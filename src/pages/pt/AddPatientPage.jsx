@@ -7,12 +7,18 @@ import { useAuthStore } from '@/stores/authStore'
 
 export default function AddPatientPage() {
   const user = useAuthStore((s) => s.user)
+  const role = useAuthStore((s) => s.role)
+  const base = role === 'admin' ? '/admin' : '/pt'
   const { createPatient } = usePatients(user?.id)
   const navigate = useNavigate()
 
   async function handleSubmit(values) {
-    const patient = await createPatient(values)
-    navigate(`/pt/patients/${patient.id}`)
+    try {
+      const patient = await createPatient(values)
+      navigate(`${base}/patients/${patient.id}`)
+    } catch (err) {
+      console.error('Failed to create patient:', err)
+    }
   }
 
   return (

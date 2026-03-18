@@ -2,12 +2,15 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   getNotesByAppointment,
   getNotesByPatient,
+  getNotesByPatientAndType,
+  getLatestNoteForPatient,
   createNote,
   updateNote as updateNoteService,
+  signNote as signNoteService,
 } from '../services/notes.service'
 
 export function useSessionNotes(filters = {}) {
-  const { appointmentId, patientId } = filters
+  const { appointmentId, patientId, noteType } = filters
   const [notes, setNotes] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -21,6 +24,8 @@ export function useSessionNotes(filters = {}) {
 
       if (appointmentId) {
         data = await getNotesByAppointment(appointmentId)
+      } else if (patientId && noteType) {
+        data = await getNotesByPatientAndType(patientId, noteType)
       } else if (patientId) {
         data = await getNotesByPatient(patientId)
       }
@@ -31,7 +36,7 @@ export function useSessionNotes(filters = {}) {
     } finally {
       setIsLoading(false)
     }
-  }, [appointmentId, patientId])
+  }, [appointmentId, patientId, noteType])
 
   useEffect(() => {
     if (appointmentId || patientId) {
@@ -54,12 +59,19 @@ export function useSessionNotes(filters = {}) {
     return data
   }
 
+  async function signNote(noteId, signatureData) {
+    const data = await signNoteService(noteId, signatureData)
+    await fetchNotes()
+    return data
+  }
+
   return {
     notes,
     isLoading,
     error,
     saveNote,
     updateNote,
+    signNote,
     refetch: fetchNotes,
   }
 }
